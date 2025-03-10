@@ -51,10 +51,10 @@ plt.style.use("bmh")
 # 
 # Make sure you name the variable `auto_mpg_df` and that you use the appropriate pandas method to load the data.
 
-# In[ ]:
+# In[8]:
 
 
-
+auto_mpg_df = pd.read_table('data/auto-mpg/auto-mpg.data', sep="\t")
 
 
 # <details>
@@ -76,10 +76,10 @@ plt.style.use("bmh")
 # #### 2.1: Display the <u>first</u> 5 rows of the dataframe
 # 
 
-# In[ ]:
+# In[9]:
 
 
-
+auto_mpg_df.head(5)
 
 
 # <details>
@@ -104,10 +104,10 @@ plt.style.use("bmh")
 
 # #### 2.2: Display the <u>last</u> 5 rows of the dataframe
 
-# In[ ]:
+# In[10]:
 
 
-
+auto_mpg_df.tail()
 
 
 # <details>
@@ -124,7 +124,7 @@ plt.style.use("bmh")
 # In[ ]:
 
 
-
+auto_mpg_df.sample(5)
 
 
 # <details>
@@ -142,10 +142,10 @@ plt.style.use("bmh")
 # 
 # #### 3.1: Display the number of rows and columns in the dataframe
 
-# In[ ]:
+# In[16]:
 
 
-
+auto_mpg_df.shape
 
 
 # <details>
@@ -159,10 +159,10 @@ plt.style.use("bmh")
 # #### 3.2: Display a summary about the dataframe
 # 
 
-# In[ ]:
+# In[17]:
 
 
-
+auto_mpg_df.info()
 
 
 # 
@@ -176,10 +176,10 @@ plt.style.use("bmh")
 
 # ### 3.3: Display the statistics for the dataframe
 
-# In[ ]:
+# In[18]:
 
 
-
+auto_mpg_df.describe()
 
 
 # <details>
@@ -205,10 +205,10 @@ plt.style.use("bmh")
 # 
 # </details>
 
-# In[ ]:
+# In[19]:
 
 
-
+auto_mpg_df.duplicated().sum()
 
 
 # 
@@ -223,10 +223,12 @@ plt.style.use("bmh")
 # #### 4.2: Show the duplicate records
 # using the results of the duplicated() method as a predicate to filter the dataframe, displaying the duplicate records. 
 
-# In[ ]:
+# In[22]:
 
 
-
+auto_mpg_df[
+    auto_mpg_df.duplicated()
+]
 
 
 # 
@@ -251,10 +253,12 @@ plt.style.use("bmh")
 #   - You can specify a subset of columns to check for duplicates by passing a list of column names to the `subset` parameter.
 # </details>
 
-# In[ ]:
+# In[23]:
 
 
-
+auto_mpg_df.duplicated(
+    subset=['mpg', 'cylinders', 'acceleration','origin']
+).sum()
 
 
 # 
@@ -280,10 +284,10 @@ plt.style.use("bmh")
 #   - Make sure you either save the results of the method to a new variable, or use the `inplace` parameter to update the dataframe in place.
 # </details>
 
-# In[ ]:
+# In[24]:
 
 
-
+auto_mpg_df.drop_duplicates(inplace=True)
 
 
 # 
@@ -298,10 +302,10 @@ plt.style.use("bmh")
 # #### 5.2: Confirm that the duplicate records were removed
 # Check the number of records in the dataframe to confirm that the duplicates were removed.
 
-# In[ ]:
+# In[25]:
 
 
-
+auto_mpg_df.shape
 
 
 # <details>
@@ -315,13 +319,13 @@ plt.style.use("bmh")
 # ### Exercise 6: Data Cleaning: Checking for Missing Values
 # #### 6.1: Use `info()` to check for missing values
 
-# In[ ]:
+# In[26]:
 
 
-
+auto_mpg_df.info()
 
 How many and what are the missing records? ANSWER HERE
-
+There are 8 missing mpg records and 6 missing horsepower records.
 # #### 6.2: Use `isna()` to check for missing values
 # 
 # <details>
@@ -333,10 +337,10 @@ How many and what are the missing records? ANSWER HERE
 # 
 # </details>
 
-# In[ ]:
+# In[27]:
 
 
-
+auto_mpg_df.isna().sum()
 
 
 # <details>
@@ -357,10 +361,10 @@ How many and what are the missing records? ANSWER HERE
 # 
 # </details>
 
-# In[ ]:
+# In[28]:
 
 
-
+auto_mpg_df.isnull().sum()
 
 
 # <details>
@@ -372,7 +376,12 @@ How many and what are the missing records? ANSWER HERE
 # </details>
 
 # #### What's the difference between `isna()` and `isnull()`? what's your source?
-ANSWER HERE
+
+# To my understanding, based on the results and what I learned from a user on Kaggle, the difference between them is purely semantic.
+# 'isna()' stands for <i> is not available </i> and 'isnull()' stands for <i> is null </i>
+# Both exist to help readability and be used based on user prefrence. 
+# 
+# Here is my source:https://www.kaggle.com/discussions/general/341193
 
 # ### Exercise 7: Data Cleaning: Dropping Missing Values
 # 
@@ -391,10 +400,13 @@ ANSWER HERE
 # 
 # </details>
 
-# In[ ]:
+# In[29]:
 
 
-
+auto_mpg_df.dropna(
+    subset=['mpg'],
+    inplace=True
+)
 
 
 # <details>
@@ -410,10 +422,10 @@ ANSWER HERE
 
 # #### 7.2: Confirm that the missing values in `mpg` were removed
 
-# In[ ]:
+# In[30]:
 
 
-
+auto_mpg_df.isna().sum()
 
 
 # <details>
@@ -441,10 +453,11 @@ ANSWER HERE
 # </details>
 # 
 
-# In[ ]:
+# In[31]:
 
 
-
+auto_mpg_df['horsepower'].plot.hist(bins=40)
+plt.show()
 
 
 # <details>
@@ -486,10 +499,12 @@ ANSWER HERE
 #   - You'll need to use the scipy library to calculate the trimmed mean.
 # </details>
 
-# In[ ]:
+# In[33]:
 
 
-
+horsepower_mean = auto_mpg_df['horsepower'].mean()
+horsepower_median = auto_mpg_df['horsepower'].median()
+horsepower_trimmed_mean = trim_mean(auto_mpg_df['horsepower'], 0.1)
 
 
 # <details>
@@ -506,7 +521,7 @@ ANSWER HERE
 
 # #### 8.3: Display the central tendency measures on the distribution plot
 
-# In[ ]:
+# In[34]:
 
 
 fig, ax = plt.subplots(figsize = (8,4))
@@ -534,10 +549,10 @@ plt.show()
 
 # #### 8.4: Replace the missing values in the `horsepower` column with the median value
 
-# In[ ]:
+# In[35]:
 
 
-
+auto_mpg_df['horsepower'].fillna(horsepower_median, inplace=True)
 
 
 # <details>
@@ -550,10 +565,10 @@ plt.show()
 
 # #### 8.5: Confirm that the missing values in `horsepower` were replaced
 
-# In[ ]:
+# In[36]:
 
 
-
+auto_mpg_df.isna().sum()
 
 
 # <details>
@@ -852,7 +867,7 @@ display(without_outliers.shape)
 
 # Make sure you run the following cell; this converts this Jupyter notebook to a Python script. and will make the process of reviewing your code on GitHub easier
 
-# In[ ]:
+# In[2]:
 
 
 # 🦉: The following command converts this Jupyter notebook to a Python script.
